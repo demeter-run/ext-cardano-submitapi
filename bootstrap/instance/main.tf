@@ -6,15 +6,6 @@ variable "image" {
   type = string
 }
 
-variable "submitapi_version" {
-  type = string
-
-  validation {
-    condition     = contains(["stable", "v135"], var.submitapi_version)
-    error_message = "Invalid submit api version."
-  }
-}
-
 variable "salt" {
   type = string
 }

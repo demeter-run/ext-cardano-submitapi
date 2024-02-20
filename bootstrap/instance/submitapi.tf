@@ -1,5 +1,5 @@
 locals {
-  name           = "submitapi-${var.network}-${var.submitapi_version}-${var.salt}"
+  name           = "submitapi-${var.network}-${var.salt}"
   container_port = 8090
 }
 
@@ -9,7 +9,6 @@ resource "kubernetes_deployment_v1" "ogmios" {
     labels = {
       "demeter.run/kind"                      = "SubmitApiInstance"
       "cardano.demeter.run/network"           = var.network
-      "cardano.demeter.run/submitapi-version" = var.submitapi_version
     }
   }
 
@@ -20,7 +19,6 @@ resource "kubernetes_deployment_v1" "ogmios" {
       match_labels = {
         "demeter.run/instance"                  = local.name
         "cardano.demeter.run/network"           = var.network
-        "cardano.demeter.run/submitapi-version" = var.submitapi_version
       }
     }
 
@@ -31,7 +29,6 @@ resource "kubernetes_deployment_v1" "ogmios" {
         labels = {
           "demeter.run/instance"                  = local.name
           "cardano.demeter.run/network"           = var.network
-          "cardano.demeter.run/submitapi-version" = var.submitapi_version
         }
       }
 
