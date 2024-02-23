@@ -41,7 +41,7 @@ module "submitapi_instances" {
   source     = "./instance"
 
   namespace        = var.namespace
-  image            = each.value.submitapi_image
+  image            = each.value.image
   salt             = each.value.salt
   node_private_dns = each.value.node_private_dns
   testnet_magic    = each.value.testnet_magic
