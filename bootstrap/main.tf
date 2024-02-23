@@ -9,7 +9,7 @@ module "submitapi_v1_feature" {
   source             = "./feature"
   namespace          = var.namespace
   operator_image_tag = var.operator_image_tag
-  metrics_delay      = 60
+  metrics_delay      = var.metrics_delay
   ingress_class      = var.ingress_class
   dns_zone           = var.dns_zone
   api_key_salt       = var.api_key_salt
@@ -25,8 +25,6 @@ module "submitapi_v1_gateway" {
   networks       = var.networks
   extension_name = var.extension_name
 }
-
-// mainnet
 
 module "submitapi_configs" {
   depends_on = [kubernetes_namespace.namespace]
