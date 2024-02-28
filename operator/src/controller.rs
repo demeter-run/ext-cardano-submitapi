@@ -30,7 +30,8 @@ impl Context {
     kind = "SubmitAPIPort",
     group = "demeter.run",
     version = "v1alpha1",
-    shortname = "kpts",
+    shortname = "sapts",
+    category = "demeter-port",
     namespaced
 )]
 #[kube(status = "SubmitAPIPortStatus")]
