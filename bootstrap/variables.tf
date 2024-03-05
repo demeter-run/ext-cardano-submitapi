@@ -29,7 +29,6 @@ variable "operator_image_tag" {
 
 variable "api_key_salt" {
   type    = string
-  default = "submitapi-salt"
 }
 
 variable "dcu_per_request" {
