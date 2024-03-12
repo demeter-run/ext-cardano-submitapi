@@ -14,7 +14,7 @@ resource "kubernetes_manifest" "customresourcedefinition_submitapiports_demeter_
         "kind" = "SubmitAPIPort"
         "plural" = "submitapiports"
         "shortNames" = [
-          "kpts",
+          "sapts",
         ]
         "singular" = "submitapiport"
       }
