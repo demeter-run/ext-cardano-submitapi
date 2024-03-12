@@ -11,7 +11,7 @@ resource "kubernetes_manifest" "customresourcedefinition_submitapiports_demeter_
         "categories" = [
           "demeter-port",
         ]
-        "kind" = "SubmitAPIPort"
+        "kind" = "SubmitApiPort"
         "plural" = "submitapiports"
         "shortNames" = [
           "sapts",
@@ -51,7 +51,7 @@ resource "kubernetes_manifest" "customresourcedefinition_submitapiports_demeter_
           "name" = "v1alpha1"
           "schema" = {
             "openAPIV3Schema" = {
-              "description" = "Auto-generated derived type for SubmitAPIPortSpec via `CustomResource`"
+              "description" = "Auto-generated derived type for SubmitApiPortSpec via `CustomResource`"
               "properties" = {
                 "spec" = {
                   "properties" = {
@@ -102,7 +102,7 @@ resource "kubernetes_manifest" "customresourcedefinition_submitapiports_demeter_
               "required" = [
                 "spec",
               ]
-              "title" = "SubmitAPIPort"
+              "title" = "SubmitApiPort"
               "type" = "object"
             }
           }
