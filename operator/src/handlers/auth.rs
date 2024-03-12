@@ -16,10 +16,10 @@ use std::collections::BTreeMap;
 use tracing::info;
 
 use crate::{
-    create_resource, get_config, get_resource, kong_consumer, patch_resource, Error, SubmitAPIPort,
+    create_resource, get_config, get_resource, kong_consumer, patch_resource, Error, SubmitApiPort,
 };
 
-pub async fn handle_auth(client: &Client, crd: &SubmitAPIPort) -> Result<String, Error> {
+pub async fn handle_auth(client: &Client, crd: &SubmitApiPort) -> Result<String, Error> {
     let key = build_api_key(crd).await?;
 
     handle_auth_secret(client, crd, &key).await?;
@@ -29,7 +29,7 @@ pub async fn handle_auth(client: &Client, crd: &SubmitAPIPort) -> Result<String,
     Ok(key)
 }
 
-async fn handle_auth_secret(client: &Client, crd: &SubmitAPIPort, key: &str) -> Result<(), Error> {
+async fn handle_auth_secret(client: &Client, crd: &SubmitApiPort, key: &str) -> Result<(), Error> {
     let namespace = crd.namespace().unwrap();
     let name = build_auth_name(&crd.name_any());
     let secret = build_auth_secret(crd, key);
@@ -55,7 +55,7 @@ async fn handle_auth_secret(client: &Client, crd: &SubmitAPIPort, key: &str) -> 
     Ok(())
 }
 
-async fn handle_acl_secret(client: &Client, crd: &SubmitAPIPort) -> Result<(), Error> {
+async fn handle_acl_secret(client: &Client, crd: &SubmitApiPort) -> Result<(), Error> {
     let namespace = crd.namespace().unwrap();
     let name = build_acl_name(&crd.name_any());
     let secret = build_acl_secret(crd);
@@ -81,7 +81,7 @@ async fn handle_acl_secret(client: &Client, crd: &SubmitAPIPort) -> Result<(), E
     Ok(())
 }
 
-async fn handle_consumer(client: &Client, crd: &SubmitAPIPort) -> Result<(), Error> {
+async fn handle_consumer(client: &Client, crd: &SubmitApiPort) -> Result<(), Error> {
     let namespace = crd.namespace().unwrap();
     let name = build_auth_name(&crd.name_any());
 
@@ -102,7 +102,7 @@ async fn handle_consumer(client: &Client, crd: &SubmitAPIPort) -> Result<(), Err
     Ok(())
 }
 
-async fn build_api_key(crd: &SubmitAPIPort) -> Result<String, Error> {
+async fn build_api_key(crd: &SubmitApiPort) -> Result<String, Error> {
     let namespace = crd.namespace().unwrap();
     let name = build_auth_name(&crd.name_any());
 
@@ -139,7 +139,7 @@ fn build_rate_limit_name(tier: &str) -> String {
     format!("rate-limiting-submitapi-tier-{}", tier)
 }
 
-fn build_auth_secret(crd: &SubmitAPIPort, api_key: &str) -> Secret {
+fn build_auth_secret(crd: &SubmitApiPort, api_key: &str) -> Secret {
     let mut string_data = BTreeMap::new();
     string_data.insert("key".into(), api_key.into());
 
@@ -149,8 +149,8 @@ fn build_auth_secret(crd: &SubmitAPIPort, api_key: &str) -> Secret {
     let metadata = ObjectMeta {
         name: Some(build_auth_name(&crd.name_any())),
         owner_references: Some(vec![OwnerReference {
-            api_version: SubmitAPIPort::api_version(&()).to_string(),
-            kind: SubmitAPIPort::kind(&()).to_string(),
+            api_version: SubmitApiPort::api_version(&()).to_string(),
+            kind: SubmitApiPort::kind(&()).to_string(),
             name: crd.name_any(),
             uid: crd.uid().unwrap(),
             ..Default::default()
@@ -167,7 +167,7 @@ fn build_auth_secret(crd: &SubmitAPIPort, api_key: &str) -> Secret {
     }
 }
 
-fn build_acl_secret(crd: &SubmitAPIPort) -> Secret {
+fn build_acl_secret(crd: &SubmitApiPort) -> Secret {
     let mut string_data = BTreeMap::new();
     string_data.insert("group".into(), crd.spec.network.to_string());
 
@@ -177,8 +177,8 @@ fn build_acl_secret(crd: &SubmitAPIPort) -> Secret {
     let metadata = ObjectMeta {
         name: Some(build_acl_name(&crd.name_any())),
         owner_references: Some(vec![OwnerReference {
-            api_version: SubmitAPIPort::api_version(&()).to_string(),
-            kind: SubmitAPIPort::kind(&()).to_string(),
+            api_version: SubmitApiPort::api_version(&()).to_string(),
+            kind: SubmitApiPort::kind(&()).to_string(),
             name: crd.name_any(),
             uid: crd.uid().unwrap(),
             ..Default::default()
@@ -195,7 +195,7 @@ fn build_acl_secret(crd: &SubmitAPIPort) -> Secret {
     }
 }
 
-fn build_consumer(crd: &SubmitAPIPort) -> Result<(ObjectMeta, JsonValue, JsonValue), Error> {
+fn build_consumer(crd: &SubmitApiPort) -> Result<(ObjectMeta, JsonValue, JsonValue), Error> {
     let kong_consumer = kong_consumer();
     let config = get_config();
 
@@ -211,8 +211,8 @@ fn build_consumer(crd: &SubmitAPIPort) -> Result<(ObjectMeta, JsonValue, JsonVal
       },
       "ownerReferences": [
         {
-          "apiVersion": SubmitAPIPort::api_version(&()).to_string(), // @TODO: try to grab this from the owner
-          "kind": SubmitAPIPort::kind(&()).to_string(), // @TODO: try to grab this from the owner
+          "apiVersion": SubmitApiPort::api_version(&()).to_string(), // @TODO: try to grab this from the owner
+          "kind": SubmitApiPort::kind(&()).to_string(), // @TODO: try to grab this from the owner
           "name": crd.name_any(),
           "uid": crd.uid()
         }

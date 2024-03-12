@@ -7,7 +7,7 @@ use prometheus::{opts, IntCounterVec, Registry};
 use regex::Regex;
 use tracing::{error, info, instrument};
 
-use crate::{get_config, Error, Network, State, SubmitAPIPort};
+use crate::{get_config, Error, Network, State, SubmitApiPort};
 
 #[derive(Clone)]
 pub struct Metrics {
@@ -59,7 +59,7 @@ impl Metrics {
         Ok(self)
     }
 
-    pub fn reconcile_failure(&self, crd: &SubmitAPIPort, e: &Error) {
+    pub fn reconcile_failure(&self, crd: &SubmitApiPort, e: &Error) {
         self.reconcile_failures
             .with_label_values(&[crd.name_any().as_ref(), e.metric_label().as_ref()])
             .inc()
@@ -73,11 +73,11 @@ impl Metrics {
 
     pub fn count_dcu_consumed(&self, ns: &str, network: Network, dcu: f64) {
         let project = ns.split_once("prj-").unwrap().1;
-        let service = format!("{}-{}", SubmitAPIPort::kind(&()), network);
+        let service = format!("{}-{}", SubmitApiPort::kind(&()), network);
         let service_type = format!(
             "{}.{}",
-            SubmitAPIPort::plural(&()),
-            SubmitAPIPort::group(&())
+            SubmitApiPort::plural(&()),
+            SubmitApiPort::group(&())
         );
         let tenancy = "proxy";
 

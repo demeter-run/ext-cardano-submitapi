@@ -27,14 +27,14 @@ impl Context {
 
 #[derive(CustomResource, Deserialize, Serialize, Clone, Debug, JsonSchema)]
 #[kube(
-    kind = "SubmitAPIPort",
+    kind = "SubmitApiPort",
     group = "demeter.run",
     version = "v1alpha1",
     shortname = "sapts",
     category = "demeter-port",
     namespaced
 )]
-#[kube(status = "SubmitAPIPortStatus")]
+#[kube(status = "SubmitApiPortStatus")]
 #[kube(printcolumn = r#"
         {"name": "Network", "jsonPath": ".spec.network", "type": "string"},
         {"name": "Throughput Tier", "jsonPath":".spec.throughputTier", "type": "string"}, 
@@ -43,7 +43,7 @@ impl Context {
         {"name": "Auth Token", "jsonPath": ".status.authToken", "type": "string"}
     "#)]
 #[serde(rename_all = "camelCase")]
-pub struct SubmitAPIPortSpec {
+pub struct SubmitApiPortSpec {
     pub operator_version: String,
     pub network: Network,
     // throughput should be 0, 1, 2
@@ -52,25 +52,25 @@ pub struct SubmitAPIPortSpec {
 
 #[derive(Deserialize, Serialize, Clone, Default, Debug, JsonSchema)]
 #[serde(rename_all = "camelCase")]
-pub struct SubmitAPIPortStatus {
+pub struct SubmitApiPortStatus {
     pub endpoint_url: String,
     pub authenticated_endpoint_url: Option<String>,
     pub auth_token: String,
 }
 
-async fn reconcile(crd: Arc<SubmitAPIPort>, ctx: Arc<Context>) -> Result<Action> {
+async fn reconcile(crd: Arc<SubmitApiPort>, ctx: Arc<Context>) -> Result<Action> {
     let key = handle_auth(&ctx.client, &crd).await?;
 
     let (hostname, hostname_key) = build_hostname(&crd.spec.network, &key);
 
-    let status = SubmitAPIPortStatus {
+    let status = SubmitApiPortStatus {
         endpoint_url: format!("https://{hostname}",),
         authenticated_endpoint_url: format!("https://{hostname_key}").into(),
         auth_token: key,
     };
 
     let namespace = crd.namespace().unwrap();
-    let submitapi_port = SubmitAPIPort::api_resource();
+    let submitapi_port = SubmitApiPort::api_resource();
 
     patch_resource_status(
         ctx.client.clone(),
@@ -86,7 +86,7 @@ async fn reconcile(crd: Arc<SubmitAPIPort>, ctx: Arc<Context>) -> Result<Action>
     Ok(Action::await_change())
 }
 
-fn error_policy(crd: Arc<SubmitAPIPort>, err: &Error, ctx: Arc<Context>) -> Action {
+fn error_policy(crd: Arc<SubmitApiPort>, err: &Error, ctx: Arc<Context>) -> Action {
     error!(error = err.to_string(), "reconcile failed");
     ctx.metrics.reconcile_failure(&crd, err);
     Action::requeue(Duration::from_secs(5))
@@ -100,7 +100,7 @@ pub async fn run(state: Arc<State>) {
         .await
         .expect("failed to create kube client");
 
-    let crds = Api::<SubmitAPIPort>::all(client.clone());
+    let crds = Api::<SubmitApiPort>::all(client.clone());
 
     let ctx = Context::new(client, state.metrics.clone());
 
