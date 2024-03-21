@@ -46,10 +46,37 @@ variable "metrics_delay" {
   default = 60
 }
 
-// Gateway
-variable "gateway_replicas" {
+// Proxy
+variable "proxy_image_tag" {
+  type    = string
+}
+
+variable "proxy_replicas" {
   type    = number
   default = 1
+}
+
+variable "proxy_resources" {
+  type = object({
+    limits = object({
+      cpu    = string
+      memory = string
+    })
+    requests = object({
+      cpu    = string
+      memory = string
+    })
+  })
+  default = {
+    limits : {
+      cpu : "50m",
+      memory : "250Mi"
+    }
+    requests : {
+      cpu : "50m",
+      memory : "250Mi"
+    }
+  }
 }
 
 variable "instances" {
