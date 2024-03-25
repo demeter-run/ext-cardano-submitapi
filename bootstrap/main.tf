@@ -24,7 +24,6 @@ module "submitapi_v1_proxy" {
   replicas        = var.proxy_replicas
   resources       = var.proxy_resources
   dns_zone        = var.dns_zone
-  networks        = var.networks
   extension_name  = var.extension_name
 }
 

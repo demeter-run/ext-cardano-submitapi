@@ -54,11 +54,6 @@ variable "extension_name" {
   type = string
 }
 
-variable "networks" {
-  type    = list(string)
-  default = ["mainnet", "preprod", "preview"]
-}
-
 variable "versions" {
   type    = list(string)
   default = ["2"]

@@ -55,7 +55,7 @@ pub async fn build_api_key(crd: &SubmitApiPort) -> Result<String, Error> {
 
     let salt = config.api_key_salt.as_bytes();
 
-    let mut output = vec![0; 16];
+    let mut output = vec![0; 8];
 
     let argon2 = Argon2::default();
     let _ = argon2.hash_password_into(password.as_slice(), salt, &mut output);
