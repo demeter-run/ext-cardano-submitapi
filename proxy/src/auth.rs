@@ -18,15 +18,14 @@ use pingora::{server::ShutdownWatch, services::background::BackgroundService};
 use tokio::pin;
 use tracing::error;
 
-use crate::{config::Config, Consumer, State};
+use crate::{Consumer, State};
 
 pub struct AuthBackgroundService {
     state: Arc<State>,
-    config: Arc<Config>,
 }
 impl AuthBackgroundService {
-    pub fn new(state: Arc<State>, config: Arc<Config>) -> Self {
-        Self { state, config }
+    pub fn new(state: Arc<State>) -> Self {
+        Self { state }
     }
 
     async fn update_auth(&self, api: Api<SubmitApiPort>) {
@@ -44,19 +43,13 @@ impl AuthBackgroundService {
             if crd.status.is_some() {
                 let network = crd.spec.network.to_string();
                 let tier = crd.spec.throughput_tier.to_string();
-                let version = crd
-                    .spec
-                    .submitapi_version
-                    .clone()
-                    .unwrap_or(self.config.default_submitapi_version.clone());
                 let key = crd.status.as_ref().unwrap().auth_token.clone();
                 let namespace = crd.metadata.namespace.as_ref().unwrap().clone();
                 let port_name = crd.name_any();
 
-                let hash_key = format!("{}.{}.{}", network, version, key);
-                let consumer = Consumer::new(namespace, port_name, tier, key);
+                let consumer = Consumer::new(namespace, port_name, tier, key.clone(), network);
 
-                consumers.insert(hash_key, consumer);
+                consumers.insert(key, consumer);
             }
         }
 

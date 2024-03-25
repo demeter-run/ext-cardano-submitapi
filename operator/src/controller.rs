@@ -60,8 +60,7 @@ pub struct SubmitApiPortStatus {
 async fn reconcile(crd: Arc<SubmitApiPort>, ctx: Arc<Context>) -> Result<Action> {
     let key = build_api_key(&crd).await?;
 
-    let (hostname, hostname_key) =
-        build_hostname(&crd.spec.network, &key, &crd.spec.submitapi_version);
+    let (hostname, hostname_key) = build_hostname(&key);
 
     let status = SubmitApiPortStatus {
         endpoint_url: format!("https://{hostname}",),

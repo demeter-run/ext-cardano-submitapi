@@ -34,7 +34,7 @@ fn main() {
 
     let auth_background_service = background_service(
         "K8S Auth Service",
-        AuthBackgroundService::new(state.clone(), config.clone()),
+        AuthBackgroundService::new(state.clone()),
     );
     server.add_service(auth_background_service);
 
@@ -72,10 +72,9 @@ pub struct State {
     metrics: Metrics,
 }
 impl State {
-    pub async fn get_consumer(&self, network: &str, version: &str, key: &str) -> Option<Consumer> {
+    pub async fn get_consumer(&self, key: &str) -> Option<Consumer> {
         let consumers = self.consumers.read().await.clone();
-        let hash_key = format!("{}.{}.{}", network, version, key);
-        consumers.get(&hash_key).cloned()
+        consumers.get(key).cloned()
     }
 }
 
@@ -85,14 +84,22 @@ pub struct Consumer {
     port_name: String,
     tier: String,
     key: String,
+    network: String,
 }
 impl Consumer {
-    pub fn new(namespace: String, port_name: String, tier: String, key: String) -> Self {
+    pub fn new(
+        namespace: String,
+        port_name: String,
+        tier: String,
+        key: String,
+        network: String,
+    ) -> Self {
         Self {
             namespace,
             port_name,
             key,
             tier,
+            network,
         }
     }
 }
