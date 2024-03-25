@@ -8,9 +8,7 @@ use serde::{Deserialize, Serialize};
 use std::{sync::Arc, time::Duration};
 use tracing::{error, info, instrument};
 
-use crate::{
-    build_api_key, build_hostname, patch_resource_status, Error, Metrics, Network, Result, State,
-};
+use crate::{build_api_key, build_hostname, patch_resource_status, Error, Metrics, Result, State};
 
 pub static SUBMITAPI_PORT_FINALIZER: &str = "submitapiports.demeter.run";
 
@@ -44,7 +42,7 @@ impl Context {
 #[serde(rename_all = "camelCase")]
 pub struct SubmitApiPortSpec {
     pub operator_version: String,
-    pub network: Network,
+    pub network: String,
     pub throughput_tier: String,
     pub submitapi_version: Option<String>,
 }
