@@ -56,15 +56,13 @@ resource "kubernetes_manifest" "customresourcedefinition_submitapiports_demeter_
                 "spec" = {
                   "properties" = {
                     "network" = {
-                      "enum" = [
-                        "mainnet",
-                        "preprod",
-                        "preview",
-                        "sanchonet",
-                      ]
                       "type" = "string"
                     }
                     "operatorVersion" = {
+                      "type" = "string"
+                    }
+                    "submitapiVersion" = {
+                      "nullable" = true
                       "type" = "string"
                     }
                     "throughputTier" = {

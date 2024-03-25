@@ -16,14 +16,15 @@ module "submitapi_v1_feature" {
   dcu_per_request    = var.dcu_per_request
 }
 
-module "submitapi_v1_gateway" {
-  depends_on     = [kubernetes_namespace.namespace]
-  source         = "./gateway"
-  namespace      = var.namespace
-  replicas       = var.gateway_replicas
-  dns_zone       = var.dns_zone
-  networks       = var.networks
-  extension_name = var.extension_name
+module "submitapi_v1_proxy" {
+  depends_on      = [kubernetes_namespace.namespace]
+  source          = "./proxy"
+  proxy_image_tag = var.proxy_image_tag
+  namespace       = var.namespace
+  replicas        = var.proxy_replicas
+  resources       = var.proxy_resources
+  dns_zone        = var.dns_zone
+  extension_name  = var.extension_name
 }
 
 module "submitapi_configs" {
