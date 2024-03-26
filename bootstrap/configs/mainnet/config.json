@@ -1,59 +1,9 @@
 {
-  "AlonzoGenesisFile": "/genesis/mainnet/alonzo-genesis.json",
-  "AlonzoGenesisHash": "7e94a15f55d1e82d10f09203fa1d40f8eede58fd8066542cf6566008068ed874",
-  "ApplicationName": "cardano-sl",
-  "ApplicationVersion": 1,
-  "ByronGenesisFile": "/genesis/mainnet/byron-genesis.json",
-  "ByronGenesisHash": "5f20df933584822601f9e3f8c024eb5eb252fe8cefb24d1317dc3d432e940ebb",
-  "ConwayGenesisFile": "/genesis/mainnet/conway-genesis.json",
-  "ConwayGenesisHash": "f28f1c1280ea0d32f8cd3143e268650d6c1a8e221522ce4a7d20d62fc09783e1",
-  "LastKnownBlockVersion-Alt": 0,
-  "LastKnownBlockVersion-Major": 3,
-  "LastKnownBlockVersion-Minor": 0,
-  "MaxKnownMajorProtocolVersion": 2,
-  "Protocol": "Cardano",
+  "EnableLogMetrics": false,
+  "EnableLogging": true,
+  "GenesisHash": "5f20df933584822601f9e3f8c024eb5eb252fe8cefb24d1317dc3d432e940ebb",
+  "PrometheusPort": 8080,
   "RequiresNetworkMagic": "RequiresNoMagic",
-  "ShelleyGenesisFile": "/genesis/mainnet/shelley-genesis.json",
-  "ShelleyGenesisHash": "1a3be38bcbb7911969283716ad7aa550250226b76a61fc51cc9a9a35d9276d81",
-  "TraceAcceptPolicy": true,
-  "TraceBlockFetchClient": false,
-  "TraceBlockFetchDecisions": false,
-  "TraceBlockFetchProtocol": false,
-  "TraceBlockFetchProtocolSerialised": false,
-  "TraceBlockFetchServer": false,
-  "TraceChainDb": true,
-  "TraceChainSyncBlockServer": false,
-  "TraceChainSyncClient": false,
-  "TraceChainSyncHeaderServer": false,
-  "TraceChainSyncProtocol": false,
-  "TraceConnectionManager": true,
-  "TraceDNSResolver": true,
-  "TraceDNSSubscription": true,
-  "TraceDiffusionInitialization": true,
-  "TraceErrorPolicy": true,
-  "TraceForge": true,
-  "TraceHandshake": false,
-  "TraceInboundGovernor": true,
-  "TraceIpSubscription": true,
-  "TraceLedgerPeers": true,
-  "TraceLocalChainSyncProtocol": false,
-  "TraceLocalErrorPolicy": true,
-  "TraceLocalHandshake": false,
-  "TraceLocalRootPeers": true,
-  "TraceLocalTxSubmissionProtocol": false,
-  "TraceLocalTxSubmissionServer": false,
-  "TraceMempool": true,
-  "TraceMux": false,
-  "TracePeerSelection": true,
-  "TracePeerSelectionActions": true,
-  "TracePublicRootPeers": true,
-  "TraceServer": true,
-  "TraceTxInbound": false,
-  "TraceTxOutbound": false,
-  "TraceTxSubmissionProtocol": false,
-  "TracingVerbosity": "NormalVerbosity",
-  "TurnOnLogMetrics": true,
-  "TurnOnLogging": true,
   "defaultBackends": [
     "KatipBK"
   ],
@@ -63,24 +13,83 @@
       "stdout"
     ]
   ],
-  "hasEKG": 12788,
-  "hasPrometheus": [
-    "0.0.0.0",
-    12798
-  ],
   "minSeverity": "Info",
   "options": {
-    "mapBackends": {
-      "cardano.node.metrics": [
-        "EKGViewBK"
-      ],
-      "cardano.node.resources": [
-        "EKGViewBK"
-      ]
+    "cfokey": {
+      "value": "Release-1.0.0"
+    },
+    "mapBackends": {},
+    "mapSeverity": {
+      "db-sync-node": "Info",
+      "db-sync-node.Mux": "Error",
+      "db-sync-node.Subscription": "Error"
     },
     "mapSubtrace": {
-      "cardano.node.metrics": {
-        "subtrace": "Neutral"
+      "#ekgview": {
+        "contents": [
+          [
+            {
+              "contents": "cardano.epoch-validation.benchmark",
+              "tag": "Contains"
+            },
+            [
+              {
+                "contents": ".monoclock.basic.",
+                "tag": "Contains"
+              }
+            ]
+          ],
+          [
+            {
+              "contents": "cardano.epoch-validation.benchmark",
+              "tag": "Contains"
+            },
+            [
+              {
+                "contents": "diff.RTS.cpuNs.timed.",
+                "tag": "Contains"
+              }
+            ]
+          ],
+          [
+            {
+              "contents": "#ekgview.#aggregation.cardano.epoch-validation.benchmark",
+              "tag": "StartsWith"
+            },
+            [
+              {
+                "contents": "diff.RTS.gcNum.timed.",
+                "tag": "Contains"
+              }
+            ]
+          ]
+        ],
+        "subtrace": "FilterTrace"
+      },
+      "#messagecounters.aggregation": {
+        "subtrace": "NoTrace"
+      },
+      "#messagecounters.ekgview": {
+        "subtrace": "NoTrace"
+      },
+      "#messagecounters.katip": {
+        "subtrace": "NoTrace"
+      },
+      "#messagecounters.monitoring": {
+        "subtrace": "NoTrace"
+      },
+      "#messagecounters.switchboard": {
+        "subtrace": "NoTrace"
+      },
+      "benchmark": {
+        "contents": [
+          "GhcRtsStats",
+          "MonotonicClock"
+        ],
+        "subtrace": "ObservableTrace"
+      },
+      "cardano.epoch-validation.utxo-stats": {
+        "subtrace": "NoTrace"
       }
     }
   },
@@ -90,6 +99,7 @@
     "rpMaxAgeHours": 24
   },
   "setupBackends": [
+    "AggregationBK",
     "KatipBK"
   ],
   "setupScribes": [
