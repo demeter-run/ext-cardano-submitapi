@@ -12,6 +12,7 @@ pub struct Config {
     pub submitapi_port: u16,
     pub submitapi_dns: String,
     pub default_submitapi_version: String,
+    pub health_endpoint: String,
 }
 impl Config {
     pub fn new() -> Self {
@@ -38,6 +39,7 @@ impl Config {
                 .expect("SUBMITAPI_PORT must a number"),
             submitapi_dns: env::var("SUBMITAPI_DNS").expect("SUBMITAPI_DNS must be set"),
             default_submitapi_version: env::var("DEFAULT_SUBMITAPI_VERSION").unwrap_or("2".into()),
+            health_endpoint: "/dmtr_health".to_string(),
         }
     }
 }

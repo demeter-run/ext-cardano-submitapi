@@ -1,6 +1,7 @@
 use async_trait::async_trait;
 use pingora::Result;
 use pingora::{
+    http::ResponseHeader,
     proxy::{ProxyHttp, Session},
     upstreams::peer::HttpPeer,
 };
@@ -90,12 +91,22 @@ impl SubmitApiProxy {
         }
         key.to_string()
     }
+
+    async fn respond_health(&self, session: &mut Session, ctx: &mut Context) {
+        ctx.is_health_request = true;
+        session.set_keepalive(None);
+        let _ = session.write_response_body("OK".into()).await;
+        let _ = session
+            .write_response_header(Box::new(ResponseHeader::build(200, None).unwrap()))
+            .await;
+    }
 }
 
 #[derive(Debug, Default)]
 pub struct Context {
     instance: String,
     consumer: Consumer,
+    is_health_request: bool,
 }
 
 #[async_trait]
@@ -109,6 +120,12 @@ impl ProxyHttp for SubmitApiProxy {
     where
         Self::CTX: Send + Sync,
     {
+        let path = session.req_header().uri.path();
+        if path == self.config.health_endpoint {
+            self.respond_health(session, ctx).await;
+            return Ok(true);
+        }
+
         let key = self.extract_key(session);
         let consumer = self.state.get_consumer(&key).await;
 
@@ -155,11 +172,13 @@ impl ProxyHttp for SubmitApiProxy {
             self.request_summary(session, ctx)
         );
 
-        self.state.metrics.inc_http_total_request(
-            &ctx.consumer,
-            &self.config.proxy_namespace,
-            &ctx.instance,
-            &response_code,
-        );
+        if !ctx.is_health_request {
+            self.state.metrics.inc_http_total_request(
+                &ctx.consumer,
+                &self.config.proxy_namespace,
+                &ctx.instance,
+                &response_code,
+            );
+        }
     }
 }
