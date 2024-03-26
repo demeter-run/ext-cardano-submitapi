@@ -28,7 +28,7 @@ variable "operator_image_tag" {
 }
 
 variable "api_key_salt" {
-  type    = string
+  type = string
 }
 
 variable "dcu_per_request" {
@@ -48,7 +48,7 @@ variable "metrics_delay" {
 
 // Proxy
 variable "proxy_image_tag" {
-  type    = string
+  type = string
 }
 
 variable "proxy_replicas" {
@@ -86,8 +86,8 @@ variable "instances" {
     node_private_dns = string
     testnet_magic    = number
     network          = string
-    replicas         = option(number)
-    resources = option(object({
+    replicas         = optional(number)
+    resources = optional(object({
       limits = object({
         cpu    = string
         memory = string

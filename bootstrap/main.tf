@@ -66,6 +66,6 @@ module "submitapi_services" {
   source     = "./service"
 
   namespace = var.namespace
-  network   = each.value.network
+  network   = each.network
 }
 
