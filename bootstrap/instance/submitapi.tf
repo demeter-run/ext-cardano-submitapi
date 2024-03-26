@@ -4,11 +4,14 @@ locals {
 }
 
 resource "kubernetes_deployment_v1" "ogmios" {
+  wait_for_rollout = false
+
   metadata {
-    name = local.name
+    name      = local.name
+    namespace = var.namespace
     labels = {
-      "demeter.run/kind"                      = "SubmitApiInstance"
-      "cardano.demeter.run/network"           = var.network
+      "demeter.run/kind"            = "SubmitApiInstance"
+      "cardano.demeter.run/network" = var.network
     }
   }
 
@@ -17,8 +20,8 @@ resource "kubernetes_deployment_v1" "ogmios" {
 
     selector {
       match_labels = {
-        "demeter.run/instance"                  = local.name
-        "cardano.demeter.run/network"           = var.network
+        "demeter.run/instance"        = local.name
+        "cardano.demeter.run/network" = var.network
       }
     }
 
@@ -27,8 +30,8 @@ resource "kubernetes_deployment_v1" "ogmios" {
       metadata {
         name = local.name
         labels = {
-          "demeter.run/instance"                  = local.name
-          "cardano.demeter.run/network"           = var.network
+          "demeter.run/instance"        = local.name
+          "cardano.demeter.run/network" = var.network
         }
       }
 

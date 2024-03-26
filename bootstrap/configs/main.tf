@@ -13,7 +13,7 @@ resource "kubernetes_config_map" "node-config" {
   }
 
   data = {
-    "config.json" = "${file("${path.module}/${var.network}/config.json")}"
+    "submit-api-config.json" = "${file("${path.module}/${var.network}/config.json")}"
   }
 }
 
