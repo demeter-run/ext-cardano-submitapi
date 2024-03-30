@@ -61,6 +61,11 @@ resource "kubernetes_deployment_v1" "operator" {
           }
 
           env {
+            name = "DEFAULT_SUBMITAPI_VERSION"
+            value = "stable"
+          }
+
+          env {
             name  = "API_KEY_SALT"
             value = var.api_key_salt
           }
