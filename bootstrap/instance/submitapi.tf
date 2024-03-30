@@ -3,7 +3,7 @@ locals {
   container_port = 8090
 }
 
-resource "kubernetes_deployment_v1" "ogmios" {
+resource "kubernetes_deployment_v1" "submitapi" {
   wait_for_rollout = false
 
   metadata {
