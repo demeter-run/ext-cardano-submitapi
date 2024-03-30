@@ -1,7 +1,113 @@
 {
   "EnableLogMetrics": false,
   "EnableLogging": true,
+  "GenesisHash": "abc5e260bf7c5d7008eab849705fc0eae911b638dd6687b1f10cef2e2bc8a713",
   "PrometheusPort": 8080,
   "RequiresNetworkMagic": "RequiresMagic",
-  "minSeverity": "Info"
+  "defaultBackends": [
+    "KatipBK"
+  ],
+  "defaultScribes": [
+    [
+      "StdoutSK",
+      "stdout"
+    ]
+  ],
+  "minSeverity": "Info",
+  "options": {
+    "cfokey": {
+      "value": "Release-1.0.0"
+    },
+    "mapBackends": {},
+    "mapSeverity": {
+      "db-sync-node": "Info",
+      "db-sync-node.Mux": "Error",
+      "db-sync-node.Subscription": "Error"
+    },
+    "mapSubtrace": {
+      "#ekgview": {
+        "contents": [
+          [
+            {
+              "contents": "cardano.epoch-validation.benchmark",
+              "tag": "Contains"
+            },
+            [
+              {
+                "contents": ".monoclock.basic.",
+                "tag": "Contains"
+              }
+            ]
+          ],
+          [
+            {
+              "contents": "cardano.epoch-validation.benchmark",
+              "tag": "Contains"
+            },
+            [
+              {
+                "contents": "diff.RTS.cpuNs.timed.",
+                "tag": "Contains"
+              }
+            ]
+          ],
+          [
+            {
+              "contents": "#ekgview.#aggregation.cardano.epoch-validation.benchmark",
+              "tag": "StartsWith"
+            },
+            [
+              {
+                "contents": "diff.RTS.gcNum.timed.",
+                "tag": "Contains"
+              }
+            ]
+          ]
+        ],
+        "subtrace": "FilterTrace"
+      },
+      "#messagecounters.aggregation": {
+        "subtrace": "NoTrace"
+      },
+      "#messagecounters.ekgview": {
+        "subtrace": "NoTrace"
+      },
+      "#messagecounters.katip": {
+        "subtrace": "NoTrace"
+      },
+      "#messagecounters.monitoring": {
+        "subtrace": "NoTrace"
+      },
+      "#messagecounters.switchboard": {
+        "subtrace": "NoTrace"
+      },
+      "benchmark": {
+        "contents": [
+          "GhcRtsStats",
+          "MonotonicClock"
+        ],
+        "subtrace": "ObservableTrace"
+      },
+      "cardano.epoch-validation.utxo-stats": {
+        "subtrace": "NoTrace"
+      }
+    }
+  },
+  "rotation": {
+    "rpKeepFilesNum": 10,
+    "rpLogLimitBytes": 5000000,
+    "rpMaxAgeHours": 24
+  },
+  "setupBackends": [
+    "AggregationBK",
+    "KatipBK"
+  ],
+  "setupScribes": [
+    {
+      "scFormat": "ScText",
+      "scKind": "StdoutSK",
+      "scName": "stdout",
+      "scRotation": null
+    }
+  ]
 }
