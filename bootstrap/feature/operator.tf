@@ -57,11 +57,11 @@ resource "kubernetes_deployment_v1" "operator" {
 
           env {
             name  = "DCU_PER_REQUEST"
-            value = "mainnet=${var.dcu_per_request["mainnet"]},preprod=${var.dcu_per_request["preprod"]},preview=${var.dcu_per_request["preview"]}"
+            value = "mainnet=${var.dcu_per_request["mainnet"]},preprod=${var.dcu_per_request["preprod"]},preview=${var.dcu_per_request["preview"]},vector-testnet=${var.dcu_per_request["vector-testnet"]}"
           }
 
           env {
-            name = "DEFAULT_SUBMITAPI_VERSION"
+            name  = "DEFAULT_SUBMITAPI_VERSION"
             value = "stable"
           }
 

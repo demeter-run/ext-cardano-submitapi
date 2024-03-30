@@ -19,7 +19,7 @@ variable "ingress_class" {
 
 variable "networks" {
   type    = list(string)
-  default = ["mainnet", "preprod", "preview"]
+  default = ["mainnet", "preprod", "preview", "vector-testnet"]
 }
 
 // Operator
@@ -34,10 +34,11 @@ variable "api_key_salt" {
 variable "dcu_per_request" {
   type = map(string)
   default = {
-    "mainnet"   = "10"
-    "preprod"   = "5"
-    "preview"   = "5"
-    "sanchonet" = "5"
+    "mainnet"        = "10"
+    "preprod"        = "5"
+    "preview"        = "5"
+    "sanchonet"      = "5"
+    "vector-testnet" = "5"
   }
 }
 

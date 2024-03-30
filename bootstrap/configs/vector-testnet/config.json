@@ -1,0 +1,7 @@
+{
+  "EnableLogMetrics": false,
+  "EnableLogging": true,
+  "PrometheusPort": 8080,
+  "RequiresNetworkMagic": "RequiresMagic",
+  "minSeverity": "Info"
+}
