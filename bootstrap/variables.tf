@@ -47,6 +47,29 @@ variable "metrics_delay" {
   default = 60
 }
 
+variable "operator_resources" {
+  type = object({
+    limits = object({
+      cpu    = string
+      memory = string
+    })
+    requests = object({
+      cpu    = string
+      memory = string
+    })
+  })
+  default = {
+    limits = {
+      cpu    = "50m"
+      memory = "512Mi"
+    }
+    requests = {
+      cpu    = "50m"
+      memory = "512Mi"
+    }
+  }
+}
+
 // Proxy
 variable "proxy_image_tag" {
   type = string

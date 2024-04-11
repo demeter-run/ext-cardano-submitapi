@@ -34,3 +34,26 @@ variable "dcu_per_request" {
     "vector-testnet" = "5"
   }
 }
+
+variable "resources" {
+  type = object({
+    limits = object({
+      cpu    = string
+      memory = string
+    })
+    requests = object({
+      cpu    = string
+      memory = string
+    })
+  })
+  default = {
+    limits = {
+      cpu    = "50m"
+      memory = "512Mi"
+    }
+    requests = {
+      cpu    = "50m"
+      memory = "512Mi"
+    }
+  }
+}
