@@ -6,27 +6,52 @@ locals {
       "rates" = [
         {
           "interval" = "1m",
-          "limit"    = floor(120 / var.replicas)
+          "limit"    = floor(1 * 60 / var.replicas)
         },
         {
           "interval" = "1d",
-          "limit"    = floor(50000 / var.replicas)
+          "limit"    = floor(80000 / var.replicas)
         }
       ]
     },
     {
       "name" = "1",
-      "rates" = [{
-        "interval" = "1m",
-        "limit"    = 500
-      }]
+      "rates" = [
+        {
+          "interval" = "1m",
+          "limit"    = floor(5 * 60 / var.replicas)
+        },
+        {
+          "interval" = "1d",
+          "limit"    = floor(400000 / var.replicas)
+        }
+      ]
     },
     {
       "name" = "2",
-      "rates" = [{
-        "interval" = "1m",
-        "limit"    = 1000
-      }]
+      "rates" =[
+        {
+          "interval" = "1m",
+          "limit"    = floor(40 * 60 / var.replicas)
+        },
+        {
+          "interval" = "1d",
+          "limit"    = floor(2000000 / var.replicas)
+        }
+      ] 
+    },
+    {
+      "name" = "3",
+      "rates" =[
+        {
+          "interval" = "1m",
+          "limit"    = floor(80 * 60 / var.replicas)
+        },
+        {
+          "interval" = "1d",
+          "limit"    = floor(4000000 / var.replicas)
+        }
+      ] 
     }
   ]
 }
