@@ -1,6 +1,7 @@
 use auth::AuthBackgroundService;
 use config::Config;
 use dotenv::dotenv;
+use operator::{kube::ResourceExt, SubmitApiPort};
 use pingora::{
     server::{configuration::Opt, Server},
     services::background::background_service,
@@ -86,26 +87,26 @@ pub struct Consumer {
     key: String,
     network: String,
 }
-impl Consumer {
-    pub fn new(
-        namespace: String,
-        port_name: String,
-        tier: String,
-        key: String,
-        network: String,
-    ) -> Self {
-        Self {
-            namespace,
-            port_name,
-            key,
-            tier,
-            network,
-        }
-    }
-}
 impl Display for Consumer {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}.{}", self.namespace, self.port_name)
+    }
+}
+impl From<&SubmitApiPort> for Consumer {
+    fn from(value: &SubmitApiPort) -> Self {
+        let network = value.spec.network.to_string();
+        let tier = value.spec.throughput_tier.to_string();
+        let key = value.status.as_ref().unwrap().auth_token.clone();
+        let namespace = value.metadata.namespace.as_ref().unwrap().clone();
+        let port_name = value.name_any();
+
+        Self {
+            namespace,
+            port_name,
+            tier,
+            key,
+            network,
+        }
     }
 }
 
