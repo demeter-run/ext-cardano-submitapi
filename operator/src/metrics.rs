@@ -100,7 +100,7 @@ impl Metrics {
         let dcu: u64 = dcu.ceil() as u64;
 
         self.dcu
-            .with_label_values(&[project, &service, &service_type, tenancy, &instance, &tier])
+            .with_label_values(&[project, &service, &service_type, tenancy, instance, tier])
             .inc_by(dcu);
     }
 }
