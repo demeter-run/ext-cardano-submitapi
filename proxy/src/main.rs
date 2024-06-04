@@ -162,7 +162,8 @@ impl Metrics {
                 "instance",
                 "status_code",
                 "network",
-                "tier"
+                "tier",
+                "resource_name",
             ]
         )
         .unwrap();
@@ -185,6 +186,7 @@ impl Metrics {
                 &status.to_string(),
                 &consumer.network,
                 &consumer.tier,
+                &consumer.port_name,
             ])
             .inc()
     }
