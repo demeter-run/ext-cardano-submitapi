@@ -15,6 +15,7 @@ use crate::{get_config, Error, State, SubmitApiPort};
 #[derive(Clone)]
 pub struct Metrics {
     pub dcu: IntCounterVec,
+    pub usage: IntCounterVec,
     pub reconcile_failures: IntCounterVec,
     pub metrics_failures: IntCounterVec,
 }
@@ -24,6 +25,12 @@ impl Default for Metrics {
         let dcu = IntCounterVec::new(
             opts!("dmtr_consumed_dcus", "quantity of dcu consumed",),
             &["project", "service", "service_type", "tenancy"],
+        )
+        .unwrap();
+
+        let usage = IntCounterVec::new(
+            opts!("usage", "Feature usage",),
+            &["feature", "project", "resource_name", "tier"],
         )
         .unwrap();
 
@@ -47,6 +54,7 @@ impl Default for Metrics {
 
         Metrics {
             dcu,
+            usage,
             reconcile_failures,
             metrics_failures,
         }
@@ -58,6 +66,7 @@ impl Metrics {
         registry.register(Box::new(self.reconcile_failures.clone()))?;
         registry.register(Box::new(self.metrics_failures.clone()))?;
         registry.register(Box::new(self.dcu.clone()))?;
+        registry.register(Box::new(self.usage.clone()))?;
 
         Ok(self)
     }
@@ -89,6 +98,15 @@ impl Metrics {
             .with_label_values(&[project, &service, &service_type, tenancy])
             .inc_by(dcu);
     }
+
+    pub fn count_usage(&self, project: &str, resource_name: &str, tier: &str, value: f64) {
+        let feature = &SubmitApiPort::kind(&());
+        let value: u64 = value.ceil() as u64;
+
+        self.usage
+            .with_label_values(&[feature, project, resource_name, tier])
+            .inc_by(value);
+    }
 }
 
 #[instrument("metrics collector run", skip_all)]
@@ -110,7 +128,7 @@ pub fn run_metrics_collector(state: Arc<State>) {
             last_execution = end;
 
             let query = format!(
-                "sum by (consumer, network) (increase(submitapi_proxy_http_total_request{{status_code!~\"401|429|503\"}}[{start}s] @ {}))",
+                "sum by (consumer, network, tier) (increase(submitapi_proxy_http_total_request{{status_code!~\"401|429|503\"}}[{start}s] @ {}))",
                 end.timestamp_millis() / 1000
             );
 
@@ -143,6 +161,7 @@ pub fn run_metrics_collector(state: Arc<State>) {
                 if result.value == 0.0
                     || result.metric.consumer.is_none()
                     || result.metric.network.is_none()
+                    || result.metric.tier.is_none()
                 {
                     continue;
                 }
@@ -154,8 +173,10 @@ pub fn run_metrics_collector(state: Arc<State>) {
                 }
                 let project_captures = project_captures.unwrap();
                 let project = project_captures.get(1).unwrap().as_str();
+                let resource_name = project_captures.get(2).unwrap().as_str();
 
                 let network = result.metric.network.unwrap();
+                let tier = result.metric.tier.unwrap();
 
                 let dcu_per_request = config.dcu_per_request.get(&network);
                 if dcu_per_request.is_none() {
@@ -171,6 +192,9 @@ pub fn run_metrics_collector(state: Arc<State>) {
 
                 let dcu = result.value * dcu_per_request;
                 state.metrics.count_dcu_consumed(project, &network, dcu);
+                state
+                    .metrics
+                    .count_usage(project, resource_name, &tier, dcu);
             }
         }
     });
@@ -244,6 +268,7 @@ async fn api_get_metrics(
 struct PrometheusDataResultMetric {
     consumer: Option<String>,
     network: Option<String>,
+    tier: Option<String>,
 }
 
 #[derive(Debug, Deserialize)]
