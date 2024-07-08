@@ -18,6 +18,12 @@ resource "kubernetes_deployment_v1" "submitapi" {
   spec {
     replicas = var.replicas
 
+    strategy {
+      rolling_update {
+        max_surge       = 1
+        max_unavailable = 0
+      }
+    }
     selector {
       match_labels = {
         "demeter.run/instance"        = local.name
