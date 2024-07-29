@@ -55,6 +55,10 @@ resource "kubernetes_manifest" "customresourcedefinition_submitapiports_demeter_
               "properties" = {
                 "spec" = {
                   "properties" = {
+                    "authToken" = {
+                      "nullable" = true
+                      "type" = "string"
+                    }
                     "network" = {
                       "type" = "string"
                     }
