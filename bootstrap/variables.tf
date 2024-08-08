@@ -19,7 +19,7 @@ variable "ingress_class" {
 
 variable "networks" {
   type    = list(string)
-  default = ["mainnet", "preprod", "preview", "vector-testnet"]
+  default = ["mainnet", "preprod", "preview", "vector-testnet", "prime-testnet"]
 }
 
 // Operator
