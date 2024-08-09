@@ -9,11 +9,6 @@ variable "namespace" {
 
 variable "network" {
   description = "Cardano node network"
-
-  validation {
-    condition     = contains(["mainnet", "preprod", "preview", "vector-testnet"], var.network)
-    error_message = "Invalid network. Allowed values are mainnet, preprod, preview, vector-testnet."
-  }
 }
 
 resource "kubernetes_service_v1" "well_known_service" {

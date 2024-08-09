@@ -8,7 +8,7 @@ on:
     paths:
       - ".github/workflows/instance.yml"
       - "docker/dockerfile.instance"
-      - "docker/genesis/*"
+      - "docker/genesis/**"
 
 jobs:
   build-images:
