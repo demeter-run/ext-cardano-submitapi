@@ -59,6 +59,26 @@ module "submitapi_instances" {
       memory : "500Mi"
     }
   })
+  tolerations = coalesce(each.value.tolerations, [
+    {
+      effect   = "NoSchedule"
+      key      = "demeter.run/compute-profile"
+      operator = "Equal"
+      value    = "general-purpose"
+    },
+    {
+      effect   = "NoSchedule"
+      key      = "demeter.run/compute-arch"
+      operator = "Equal"
+      value    = "x86"
+    },
+    {
+      effect   = "NoSchedule"
+      key      = "demeter.run/availability-sla"
+      operator = "Equal"
+      value    = "consistent"
+    }
+  ])
 }
 
 module "submitapi_services" {
