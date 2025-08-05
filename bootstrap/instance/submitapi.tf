@@ -52,7 +52,17 @@ resource "kubernetes_deployment_v1" "submitapi" {
           name              = "main"
           image             = var.image
           image_pull_policy = "IfNotPresent"
-          args = [
+          args = var.network == "vector-testnet" ? [
+            "--mainnet",
+            "--config",
+            "/config/submit-api-config.json",
+            "--socket-path",
+            "/ipc/node.socket",
+            "--port",
+            local.container_port,
+            "--listen-address",
+            "0.0.0.0",
+            ] : [
             "--testnet-magic",
             var.testnet_magic,
             "--config",
