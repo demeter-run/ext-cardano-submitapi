@@ -19,7 +19,13 @@ variable "ingress_class" {
 
 variable "networks" {
   type    = list(string)
-  default = ["mainnet", "preprod", "preview", "vector-testnet", "prime-testnet"]
+  default = ["cardano-mainnet", "cardano-preprod", "cardano-preview", "vector-testnet", "prime-testnet"]
+}
+
+variable "dns_names" {
+  description = "List of DNS names for the certificate"
+  type        = list(string)
+  default     = null
 }
 
 // Operator

@@ -16,10 +16,13 @@ use tiers::TierBackgroundService;
 use tokio::sync::RwLock;
 use tracing::Level;
 
+use crate::utils::handle_legacy_networks;
+
 mod auth;
 mod config;
 mod proxy;
 mod tiers;
+mod utils;
 
 fn main() {
     dotenv().ok();
@@ -94,7 +97,7 @@ impl Display for Consumer {
 }
 impl From<&SubmitApiPort> for Consumer {
     fn from(value: &SubmitApiPort) -> Self {
-        let network = value.spec.network.to_string();
+        let network = handle_legacy_networks(&value.spec.network);
         let tier = value.spec.throughput_tier.to_string();
         let key = value.status.as_ref().unwrap().auth_token.clone();
         let namespace = value.metadata.namespace.as_ref().unwrap().clone();

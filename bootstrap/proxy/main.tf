@@ -64,3 +64,8 @@ variable "dns_zone" {
   default = "demeter.run"
 }
 
+variable "dns_names" {
+  description = "List of DNS names for the certificate"
+  type        = list(string)
+  default     = null
+}
