@@ -26,6 +26,7 @@ module "submitapi_v1_proxy" {
   resources       = var.proxy_resources
   dns_zone        = var.dns_zone
   extension_name  = var.extension_name
+  dns_names       = var.dns_names
 }
 
 module "submitapi_configs" {
