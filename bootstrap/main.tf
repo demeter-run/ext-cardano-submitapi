@@ -13,7 +13,6 @@ module "submitapi_v1_feature" {
   ingress_class      = var.ingress_class
   dns_zone           = var.dns_zone
   api_key_salt       = var.api_key_salt
-  dcu_per_request    = var.dcu_per_request
   resources          = var.operator_resources
 }
 
