@@ -37,17 +37,6 @@ variable "api_key_salt" {
   type = string
 }
 
-variable "dcu_per_request" {
-  type = map(string)
-  default = {
-    "mainnet"        = "10"
-    "preprod"        = "5"
-    "preview"        = "5"
-    "sanchonet"      = "5"
-    "vector-testnet" = "5"
-  }
-}
-
 variable "metrics_delay" {
   type    = number
   default = 60
