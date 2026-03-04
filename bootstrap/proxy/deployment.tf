@@ -1,6 +1,6 @@
 resource "kubernetes_deployment_v1" "submitapi_proxy" {
   wait_for_rollout = false
-  depends_on = [ kubernetes_manifest.certificate_cluster_wildcard_tls ]
+  depends_on       = [kubernetes_manifest.certificate_cluster_wildcard_tls]
 
   metadata {
     name      = local.name
@@ -78,22 +78,22 @@ resource "kubernetes_deployment_v1" "submitapi_proxy" {
           }
 
           env {
-            name = "DEFAULT_SUBMITAPI_VERSION"
+            name  = "DEFAULT_SUBMITAPI_VERSION"
             value = "v2"
           }
 
           env {
-            name = "SSL_CRT_PATH"
+            name  = "SSL_CRT_PATH"
             value = "/certs/tls.crt"
           }
 
           env {
-            name = "SSL_KEY_PATH"
+            name  = "SSL_KEY_PATH"
             value = "/certs/tls.key"
           }
 
           env {
-            name = "PROXY_TIERS_PATH"
+            name  = "PROXY_TIERS_PATH"
             value = "/configs/tiers.toml"
           }
 
@@ -122,25 +122,14 @@ resource "kubernetes_deployment_v1" "submitapi_proxy" {
           }
         }
 
-        toleration {
-          effect   = "NoSchedule"
-          key      = "demeter.run/compute-profile"
-          operator = "Equal"
-          value    = "general-purpose"
-        }
-
-        toleration {
-          effect   = "NoSchedule"
-          key      = "demeter.run/compute-arch"
-          operator = "Equal"
-          value    = "x86"
-        }
-
-        toleration {
-          effect   = "NoSchedule"
-          key      = "demeter.run/availability-sla"
-          operator = "Equal"
-          value    = "consistent"
+        dynamic "toleration" {
+          for_each = var.tolerations
+          content {
+            effect   = toleration.value.effect
+            key      = toleration.value.key
+            operator = toleration.value.operator
+            value    = toleration.value.value
+          }
         }
       }
     }

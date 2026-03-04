@@ -15,6 +15,7 @@ module "submitapi_v1_feature" {
   api_key_salt       = var.api_key_salt
   dcu_per_request    = var.dcu_per_request
   resources          = var.operator_resources
+  tolerations        = var.operator_tolerations
 }
 
 module "submitapi_v1_proxy" {
@@ -27,6 +28,7 @@ module "submitapi_v1_proxy" {
   dns_zone        = var.dns_zone
   extension_name  = var.extension_name
   dns_names       = var.dns_names
+  tolerations     = var.proxy_tolerations
 }
 
 module "submitapi_configs" {
@@ -90,4 +92,3 @@ module "submitapi_services" {
   namespace = var.namespace
   network   = each.value
 }
-

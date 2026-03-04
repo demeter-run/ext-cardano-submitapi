@@ -29,7 +29,7 @@ locals {
     },
     {
       "name" = "2",
-      "rates" =[
+      "rates" = [
         {
           "interval" = "1m",
           "limit"    = floor(40 * 60 / var.replicas)
@@ -38,11 +38,11 @@ locals {
           "interval" = "1d",
           "limit"    = floor(2000000 / var.replicas)
         }
-      ] 
+      ]
     },
     {
       "name" = "3",
-      "rates" =[
+      "rates" = [
         {
           "interval" = "1m",
           "limit"    = floor(80 * 60 / var.replicas)
@@ -51,7 +51,7 @@ locals {
           "interval" = "1d",
           "limit"    = floor(4000000 / var.replicas)
         }
-      ] 
+      ]
     }
   ]
 }
