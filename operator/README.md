@@ -11,7 +11,6 @@ This operator will create a key into the CRD to allow SubmitApi to be accessed e
 | API_KEY_SALT              | submitapi-salt                |
 | METRICS_DELAY             | 40                            |
 | PROMETHEUS_URL            |                               |
-| DCU_PER_REQUEST           | preview=5,preprod=5,mainnet=5 |
 | DEFAULT_SUBMITAPI_VERSION | v3                            |
 
 ## Port CRD
