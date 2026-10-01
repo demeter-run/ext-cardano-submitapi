@@ -51,6 +51,11 @@ module "submitapi_instances" {
   testnet_magic    = each.value.testnet_magic
   network          = each.value.network
   replicas         = coalesce(each.value.replicas, 1)
+
+  node_balancer            = each.value.node_balancer
+  node_srv_record          = each.value.node_srv_record
+  node_max_conn_per_server = each.value.node_max_conn_per_server
+
   resources = coalesce(each.value.resources, {
     limits : {
       cpu : "200m",

@@ -164,6 +164,10 @@ variable "instances" {
     testnet_magic    = number
     network          = string
     replicas         = optional(number)
+    # Node balancing; see the instance module's variables.
+    node_balancer            = optional(string, "socat")
+    node_srv_record          = optional(string)
+    node_max_conn_per_server = optional(number, 200)
     resources = optional(object({
       limits = object({
         cpu    = string
